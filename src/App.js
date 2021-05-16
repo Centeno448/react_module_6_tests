@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import TareasLista from './TareasLista'
-import uuidv4 from 'uuid/v4'
+import TareasLista from './TareasLista';
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   const [ tareas, setTareas ] = useState ([ ])
