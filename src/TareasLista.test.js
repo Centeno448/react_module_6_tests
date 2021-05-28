@@ -9,18 +9,25 @@ beforeAll(() => {
   configure({ adapter: new Adapter() });
 });
 
-test('TareasLista manda el prop "tarea" a Tarea | asegurate de que TareasLista mande un prop "tarea" al componenete Tarea', () => {
+test('TareasLista manda el prop "tarea" a Tarea | Asegúrate de que TareasLista mande un prop "tarea" al componenete Tarea', () => {
   const wrapper = shallow(<TareasLista tareas={[""]}/>);
   expect(wrapper.find(Tarea).prop('tarea')).toBeDefined()
 });
 
-test('TareasLista manda el prop "key" a Tarea | asegurate de que TareasLista mande un prop "key" al componenete Tarea', () => {
-  if(TareasLista.toString().includes(", void 0,")){
+test('TareasLista manda tarea.id en el prop "key" a Tarea | Asegúrate de que TareasLista mande "tarea.id" al prop "key" del componenete Tarea', () => {
+  const regex = /},[\da-zA-Z,.\s]+,/g
+  const tareasListaDefinition = TareasLista.toString().match(regex)[0];
+
+  if(tareasListaDefinition.includes(", void 0,")){
     throw new Error('key not set')
+  }
+
+  if(!tareasListaDefinition.includes(', tarea.id,')){
+    throw new Error('tarea not pased to key prop')
   }
 });
 
-test('TareasLista renderiza componentes Tarea en base a prop "tareas" | asegurate de que TareasLista reciba un prop "tareas" de tipo array y renderice un componenete Tarea por cada elemento presente', () => {
+test('TareasLista renderiza componentes Tarea en base a prop "tareas" | Asegúrate de que TareasLista reciba un prop "tareas" de tipo array y renderice un componenete Tarea por cada elemento presente', () => {
   const wrapper = shallow(<TareasLista tareas={["", "", ""]}/>);
   expect(wrapper.find(Tarea).length).toBe(3);
 });

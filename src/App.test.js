@@ -5,25 +5,26 @@ import { shallow } from 'enzyme';
 import App from "./App";
 import TareasLista from "./TareasLista"
 import Tarea from './Tarea';
+import {validate} from 'uuid'
 
 
 beforeAll(() => {
   configure({ adapter: new Adapter() });
 });
 
-test('App.js tiene 1 componente hijo TareasLista.js | Asegurate de renderizar 1 vez el componente <TareasLista> dentro de App.js', () => {
+test('App.js tiene 1 componente hijo TareasLista.js | Asegúrate de renderizar 1 vez el componente <TareasLista> dentro de App.js', () => {
   const wrapper = shallow(<App />);
   expect(wrapper.find(TareasLista).length).toBe(1);
 });
 
-test('App.js tiene 1 <input type="text"> | Asegurate de renderizar 1 vez un <input type="text" /> dentro de App.js', () => {
+test('App.js tiene 1 <input type="text"> | Asegúrate de renderizar 1 vez un <input type="text" /> dentro de App.js', () => {
   const wrapper = shallow(<App />);
   const input = wrapper.find('input[type="text"]')
   expect(input).toBeDefined();
   expect(input.length).toBe(1);
 });
 
-test('App.js tiene 2 botones con texto | Asegurate de renderizar 2 botones con texto dentro de App.js', () => {
+test('App.js tiene 2 botones con texto | Asegúrate de renderizar 2 botones con texto dentro de App.js', () => {
   const wrapper = shallow(<App />);
   const buttons = wrapper.find('button')
   expect(buttons).toBeDefined();
@@ -33,7 +34,7 @@ test('App.js tiene 2 botones con texto | Asegurate de renderizar 2 botones con t
 });
 
 
-test('App.js tiene 1 div con texto | Asegurate de renderizar 1 div con texto dentro de App.js', () => {
+test('App.js tiene 1 div con texto | Asegúrate de renderizar 1 div con texto dentro de App.js', () => {
   const wrapper = shallow(<App />);
   const div = wrapper.find('div')
   expect(div).toBeDefined();
@@ -41,20 +42,20 @@ test('App.js tiene 1 div con texto | Asegurate de renderizar 1 div con texto den
   expect(div.first().text().trim()).not.toBe("");
 });
 
-test('App.js utiliza el hook useState | Asegurate de utilizar el hook useState dentro de App.js', () => {
+test('App.js utiliza el hook useState | Asegúrate de utilizar el hook useState dentro de App.js', () => {
   const appDefinition = App.toString()
 
   expect(appDefinition).toContain('const [tareas, setTareas] = (0, _react.useState)([]);')
 });
 
-test('App.js manda el prop "tareas" a TareasLista | Asegurate de que App.js mande el prop "tareas" al componente TareasLista', () => {
+test('App.js manda el prop "tareas" a TareasLista | Asegúrate de que App.js mande el prop "tareas" al componente TareasLista', () => {
   const wrapper = shallow(<App />)
   const tareasLista = wrapper.find(TareasLista);
   expect(tareasLista.prop('tareas')).toBeDefined();
   expect(tareasLista.prop('tareas').length).toBe(0);
 });
 
-test('App maneja click en Añadir Tarea | Asegurate de que en App.js el boton que de agregar tareas diga "Añadir Tarea" y maneje el evento onClick con una función llamada "agregarTarea" que reciba 1 parámetro', () => {
+test('App maneja click en Añadir Tarea | Asegúrate de que en App.js el boton que de agregar tareas diga "Añadir Tarea" y maneje el evento onClick con una función llamada "agregarTarea" que reciba 1 parámetro', () => {
   const wrapper = shallow(<App />)
   const buttons = wrapper.find('button')
   const firstButton = buttons.at(0);
@@ -90,7 +91,7 @@ test('App utiliza ref | Asegúrate de que en App.js crees una ref llamada "tarea
   }
 });
 
-test('App agrega una nueva tarea | Asegurate de que la función agregar tarea tome el valor de la referencia del input y llame a la función setTareas' ,() => {
+test('App agrega una nueva tarea | Asegúrate de que la función agregar tarea tome el valor de la referencia del input y llame a la función setTareas' ,() => {
   const wrapper = mount(<App />)
   const buttons = wrapper.find('button')
 
@@ -111,7 +112,18 @@ test('App agrega una nueva tarea | Asegurate de que la función agregar tarea to
   wrapper.find("input[type='text']").getDOMNode().value = "New item";
   addButton.simulate('click')
   expect(wrapper.find(Tarea).length).toBe(1)
+  const firstTarea = wrapper.find(Tarea).first().prop('tarea')
+  expect(validate(firstTarea.id)).toBe(true);
+  expect(firstTarea.nombre).toBe("New item");
+  expect(firstTarea.completado).toBe(false);
+
   wrapper.find("input[type='text']").getDOMNode().value = "New item 2";
   addButton.simulate('click')
   expect(wrapper.find(Tarea).length).toBe(2)
+  const secondTarea = wrapper.find(Tarea).at(1).prop('tarea');
+  expect(validate(secondTarea.id)).toBe(true);
+  expect(secondTarea.nombre).toBe("New item 2");
+  expect(secondTarea.completado).toBe(false);
+
+  expect(firstTarea.id).not.toBe(secondTarea.id)
 });
