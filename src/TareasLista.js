@@ -4,7 +4,7 @@ import Tarea from './Tarea'
 export default function TareasLista({ tareas }) {
     return (
         tareas.map(tarea => {
-            return <Tarea key={tarea} tarea={tarea} />
+            return <Tarea key={tarea.id} tarea={tarea} />
         })
     )
 }
