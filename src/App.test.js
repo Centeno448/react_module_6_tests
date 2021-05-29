@@ -113,14 +113,16 @@ test('App agrega una nueva tarea | Asegúrate de que la función agregar tarea t
   addButton.simulate('click')
   expect(wrapper.find(Tarea).length).toBe(1)
   const firstTarea = wrapper.find(Tarea).first().prop('tarea')
-  expect(validate(firstTarea.id)).toBe(true);
-  expect(firstTarea.nombre).toBe("New item");
-  expect(firstTarea.completado).toBe(false);
 
   wrapper.find("input[type='text']").getDOMNode().value = "New item 2";
   addButton.simulate('click')
   expect(wrapper.find(Tarea).length).toBe(2)
   const secondTarea = wrapper.find(Tarea).at(1).prop('tarea');
+
+  expect(validate(firstTarea.id)).toBe(true);
+  expect(firstTarea.nombre).toBe("New item");
+  expect(firstTarea.completado).toBe(false);
+
   expect(validate(secondTarea.id)).toBe(true);
   expect(secondTarea.nombre).toBe("New item 2");
   expect(secondTarea.completado).toBe(false);
